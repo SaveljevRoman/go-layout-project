@@ -1,0 +1,16 @@
+{
+  "server_address": "localhost:8081",
+  "cache_update_interval": 10,
+  "mysql": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "user",
+    "password": "passwd",
+    "database": "app_database"
+  },
+  "redis": {
+    "address": "localhost:63792",
+    "password": "",
+    "db": 0
+  }
+}
