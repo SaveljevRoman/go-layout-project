@@ -56,16 +56,24 @@ func (h *UserHandlers) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
-	var user models.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	var req models.UserCreateRequest
+
+	// Парсинг и валидация запроса
+	if err := models.ParseAndValidate(r, &req); err != nil {
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
+	}
+
+	// Создаем модель пользователя из запроса
+	user := models.User{
+		Username: req.Username,
+		Email:    req.Email,
 	}
 
 	ctx := r.Context()
 	id, err := h.userService.CreateUser(ctx, &user)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
